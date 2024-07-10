@@ -1,0 +1,58 @@
+.register-container {
+    display: flex;
+    margin-top: 100px; /* Отступ сверху для навигационной панели */
+    justify-content: center; /* Центрируем по горизонтали */
+    align-items: center; /* Центрируем по вертикали */
+    height: calc(100vh - 60px); /* Высота экрана минус высота навигационной панели */
+    padding-top: 60px; /* Отступ сверху, равный высоте навигационной панели */
+    }
+    
+    .register-form {
+    background-color: #fff; /* Белый фон для формы */
+    padding: 20px; /* Внутренние отступы */
+    border-radius: 8px; /* Скругленные углы */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Тень для формы */
+    width: 300px; /* Ширина формы */
+    }
+    
+    .register-form h1 {
+    text-align: center; /* Центрируем заголовок */
+    margin-bottom: 20px; /* Отступ снизу */
+    }
+    
+    .form-group {
+    display: flex;
+    flex-direction: column; /* Располагаем элементы вертикально */
+    margin-bottom: 15px; /* Отступ между группами полей */
+    }
+    
+    .form-group label {
+    margin-bottom: 5px; /* Отступ снизу для метки */
+    width: 100%; /* Ширина метки */
+    text-align: left; /* Выравнивание текста по левому краю */
+    }
+    
+    .form-group input {
+    padding: 8px; /* Внутренние отступы для полей ввода */
+    border: 1px solid #ccc; /* Граница полей ввода */
+    border-radius: 4px; /* Скругленные углы */
+    }
+    
+    .form-group button {
+    padding: 10px; /* Внутренние отступы для кнопки */
+    background-color: #007bff; /* Фоновый цвет кнопки */
+    color: #fff; /* Цвет текста кнопки */
+    border: none; /* Убираем границу */
+    border-radius: 4px; /* Скругленные углы */
+    cursor: pointer; /* Курсор указателя */
+    }
+    
+    .form-group button:hover {
+    background-color: #0056b3; /* Цвет кнопки при наведении */
+    }
+
+.error-message {
+    color: red; /* Цвет текста ошибки */
+    font-size: 12px; /* Размер текста ошибки */
+    margin-top: 5px; /* Отступ сверху для ошибки */
+    }

@@ -1,0 +1,34 @@
+.navigation {
+    /* position: fixed; /* Закрепляем навигацию */
+    /* top: 20px; Закрепляем сверху */
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%; /* Ширина на всю страницу */
+    display: flex;
+    justify-content: center; /* Центрируем содержимое по горизонтали */
+    background-color: #f8f9fa; /* Фоновый цвет для навигации */
+    padding: 10px 0; /* Отступы сверху и снизу */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Добавляем тень для визуального отделения */
+    z-index: 1000; /* Устанавливаем высокий z-index, чтобы навигация была поверх других элементов */
+}
+    
+.nav-list {
+    list-style: none; /* Убираем маркеры списка */
+    display: flex; /* Делаем список горизонтальным */
+    padding: 0; /* Убираем отступы */
+    margin: 0; /* Убираем отступы */
+}
+    
+.nav-item {
+    margin: 0 15px; /* Отступы между элементами списка */
+}
+    
+.nav-item a {
+    text-decoration: none; /* Убираем подчеркивание ссылок */
+    color: #007bff; /* Цвет текста ссылок */
+    font-weight: bold; /* Жирный шрифт */
+}
+    
+.nav-item a:hover {
+    color: #0056b3; /* Цвет текста при наведении */
+}
