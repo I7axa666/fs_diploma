@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
@@ -19,17 +19,27 @@ password: Yup.string()
 
 function Register() {
    const navigate = useNavigate();
-   
+   const [errorMessage, setErrorMessage] = useState('');
+
    const handleSubmit = (values, { setSubmitting }) => {
 
       apiClient.post(apiPaths.register, values)
-      .then(response => {
+      .then(() => {
+         setErrorMessage('')
           setSubmitting(false);
           navigate('/login');
       })
-      .catch(error => {
-          console.log(error.response.data);
-          setSubmitting(false);
+      .catch(() => {
+         let errorMsg = 'Произошла ошибка при регистрации. Попробуйте ввести другой пароль';
+         // if (error.response && error.response.data && error.response.data.message) {
+         //  errorMsg = error.response.data.message;
+         // } else if (error.message) {
+         //  errorMsg = error.message;
+         // }
+         
+         // console.log(error.response.data);
+         setErrorMessage(errorMsg);
+         setSubmitting(false);
       });
    };
 
@@ -74,6 +84,7 @@ function Register() {
                   {msg => <div className="error-message">{msg}</div>}
                   </ErrorMessage>
                </div>
+               {errorMessage && <div style={{ color: 'red', marginTop: '10px' }}>{errorMessage}</div>}
                <div className="form-group">
                   <button type="submit" disabled={isSubmitting}>Зарегистрироваться</button>
                </div>

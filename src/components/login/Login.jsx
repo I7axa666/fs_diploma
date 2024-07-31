@@ -6,8 +6,8 @@ import apiPaths from '../../utilits/apiPaths';
 import apiClient from '../../utilits/apiClient';
 
 const LoginSchema = Yup.object().shape({
-username: Yup.string().required('Required'),
-password: Yup.string().required('Required'),
+username: Yup.string().required('Поле обязательно для заполнения'),
+password: Yup.string().required('Поле обязательно для заполнения'),
 });
 
 function Login() {
