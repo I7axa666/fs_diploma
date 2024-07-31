@@ -1,8 +1,9 @@
 import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import axios from 'axios';
-import CryptoJS from 'crypto-js';
+import { useNavigate } from 'react-router-dom';
+import apiPaths from '../../utilits/apiPaths';
+import apiClient from '../../utilits/apiClient';
 import './Style.css'
 
 const RegisterSchema = Yup.object().shape({
@@ -17,33 +18,20 @@ password: Yup.string()
 });
 
 function Register() {
+   const navigate = useNavigate();
+   
    const handleSubmit = (values, { setSubmitting }) => {
-      const encryptedPassword = CryptoJS.AES.encrypt(values.password, 'your-secret-key').toString();
-      const encryptedValues = {
-         ...values,
-         password: encryptedPassword,
-      };
 
-      axios.post('/api/register', encryptedValues)
+      apiClient.post(apiPaths.register, values)
       .then(response => {
-          alert('Registration successful');
           setSubmitting(false);
+          navigate('/login');
       })
       .catch(error => {
-          alert('Registration failed');
+          console.log(error.response.data);
           setSubmitting(false);
       });
    };
-
-    const onSubmit = (values, { setSubmitting }) => {
-      const encryptedPassword = CryptoJS.AES.encrypt(values.password, 'your-secret-key').toString();
-      const encryptedValues = {
-         ...values,
-         password: encryptedPassword,
-      };
-      console.log(encryptedValues);
-      setSubmitting(false)
-   }
 
    return (
       <div className="register-container">
@@ -54,7 +42,7 @@ function Register() {
             validationSchema={RegisterSchema}
             validateOnChange={true}
             validateOnBlur={true}
-            onSubmit={onSubmit} 
+            onSubmit={handleSubmit} 
          >
             {({ isSubmitting }) => (
                <Form>

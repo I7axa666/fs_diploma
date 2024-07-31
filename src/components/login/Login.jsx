@@ -1,7 +1,9 @@
-import React from 'react';
+import { useState } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import apiPaths from '../../utilits/apiPaths';
+import apiClient from '../../utilits/apiClient';
 
 const LoginSchema = Yup.object().shape({
 username: Yup.string().required('Required'),
@@ -9,37 +11,50 @@ password: Yup.string().required('Required'),
 });
 
 function Login() {
+   const [errorMessage, setErrorMessage] = useState('');
+   const navigate = useNavigate();
 return (
     <div>
-     <h1>Login</h1>
+     <h1>Вход в хранилище</h1>
      <Formik
         initialValues={{ username: '', password: '' }}
         validationSchema={LoginSchema}
         onSubmit={(values, { setSubmitting }) => {
-         axios.post('/api/login', values)
+         localStorage.clear();
+         apiClient.post(apiPaths.login, values)
             .then(response => {
-             alert('Login successful');
-             setSubmitting(false);
+               const token = response.data.auth_token;
+               localStorage.setItem('authToken', token);             
+               setSubmitting(false);
+               setErrorMessage('');
+               navigate('/storage');
             })
             .catch(error => {
-             alert('Login failed');
-             setSubmitting(false);
+               let errorMsg = 'Неверный логин или пароль'
+               // if (error.response && error.response.data && error.response.data.message) {
+               //    errorMsg = error.response.data.message;
+               // } else if (error.message) {
+               //    errorMsg = error.message;
+               // }
+               setErrorMessage(errorMsg);
+               setSubmitting(false);
             });
         }}
      >
         {({ isSubmitting }) => (
          <Form>
             <div>
-             <label htmlFor="username">Username</label>
+             <label htmlFor="username">Логин </label>
              <Field type="text" name="username" />
              <ErrorMessage name="username" component="div" />
             </div>
             <div>
-             <label htmlFor="password">Password</label>
+             <label htmlFor="password">Пароль </label>
              <Field type="password" name="password" />
              <ErrorMessage name="password" component="div" />
             </div>
-            <button type="submit" disabled={isSubmitting}>Login</button>
+            {errorMessage && <div style={{ color: 'red', marginTop: '10px' }}>{errorMessage}</div>}
+            <button type="submit" disabled={isSubmitting}>Войти</button>
          </Form>
         )}
      </Formik>

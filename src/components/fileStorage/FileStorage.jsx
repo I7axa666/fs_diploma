@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import apiPaths from '../../utilits/apiPaths';
+import apiClient from '../../utilits/apiClient';
 
 function FileStorage() {
 const [files, setFiles] = useState([]);
@@ -9,7 +10,7 @@ const [newFile, setNewFile] = useState(null);
 const [comment, setComment] = useState('');
 
 useEffect(() => {
-    axios.get('/api/files')
+   apiClient.get(apiPaths.files)
      .then(response => {
         setFiles(response.data);
         setLoading(false);
@@ -21,7 +22,7 @@ useEffect(() => {
 }, []);
 
 const handleDeleteFile = (fileId) => {
-    axios.delete(`/api/files/${fileId}`)
+   apiClient.delete(`${apiPaths.files} + ${fileId}`)
      .then(response => {
         setFiles(files.filter(file => file.id !== fileId));
      })
@@ -31,7 +32,7 @@ const handleDeleteFile = (fileId) => {
 };
 
 const handleRenameFile = (fileId, newName) => {
-    axios.put(`/api/files/${fileId}`, { name: newName })
+   apiClient.put(`${apiPaths.files} + ${fileId}`, { name: newName })
      .then(response => {
         setFiles(files.map(file => file.id === fileId ? response.data : file));
      })
@@ -45,7 +46,7 @@ const handleUploadFile = () => {
     formData.append('file', newFile);
     formData.append('comment', comment);
 
-    axios.post('/api/files', formData)
+    apiClient.post(apiPaths.files, formData)
      .then(response => {
         setFiles([...files, response.data]);
         setNewFile(null);
@@ -61,7 +62,7 @@ if (error) return <p>Error loading files</p>;
 
 return (
     <div>
-     <h1>File Storage</h1>
+     <h1>Хранилище</h1>
      <input
         type="file"
         onChange={(e) => setNewFile(e.target.files[0])}
@@ -72,14 +73,14 @@ return (
         value={comment}
         onChange={(e) => setComment(e.target.value)}
      />
-     <button onClick={handleUploadFile}>Upload</button>
+     <button onClick={handleUploadFile}>Отправить в облако</button>
      <table>
         <thead>
          <tr>
-            <th>Name</th>
-            <th>Comment</th>
-            <th>Size</th>
-            <th>Upload Date</th>
+            <th>Название</th>
+            <th>Комментарии</th>
+            <th>Размер</th>
+            <th>Время загрузки</th>
             <th>Last Download Date</th>
             <th>Actions</th>
          </tr>
@@ -93,10 +94,10 @@ return (
              <td>{file.uploadDate}</td>
              <td>{file.lastDownloadDate}</td>
              <td>
-                <button onClick={() => handleDeleteFile(file.id)}>Delete</button>
-                <button onClick={() => handleRenameFile(file.id, prompt('New name:'))}>Rename</button>
-                <button onClick={() => window.open(`/api/files/${file.id}/download`)}>Download</button>
-                <button onClick={() => navigator.clipboard.writeText(`/api/files/${file.id}`)}>Copy Link</button>
+                <button onClick={() => handleDeleteFile(file.id)}>Удалить</button>
+                <button onClick={() => handleRenameFile(file.id, prompt('New name:'))}>Переименовать</button>
+                <button onClick={() => window.open(`${apiPaths.files} + ${file.id}/download`)}>Загрузить</button>
+                <button onClick={() => navigator.clipboard.writeText(`/api/files/${file.id}`)}>Поделиться</button>
              </td>
             </tr>
          ))}
