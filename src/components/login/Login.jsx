@@ -29,7 +29,7 @@ return (
                setErrorMessage('');
                navigate('/storage');
             })
-            .catch(error => {
+            .catch(() => {
                let errorMsg = 'Неверный логин или пароль'
                // if (error.response && error.response.data && error.response.data.message) {
                //    errorMsg = error.response.data.message;

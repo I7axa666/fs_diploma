@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import apiPaths from '../../utilits/apiPaths';
 import apiClient from '../../utilits/apiClient';
 
@@ -42,23 +42,38 @@ const handleRenameFile = (fileId, newName) => {
 };
 
 const handleUploadFile = () => {
+   if (!newFile) {
+      setError('Пожалуйста, выберите файл для загрузки');
+      return;
+   }
     const formData = new FormData();
-    formData.append('file', newFile);
+    formData.append('storage_path', newFile);
     formData.append('comment', comment);
-
+    formData.append('original_name', newFile.name);
+    formData.append('size', newFile.size);
+    for (let [key, value] of formData.entries()) {
+      if (value instanceof File) {
+          console.log(`${key}: ${value.name}, ${value.size}, ${value.type}`);
+      } else {
+          console.log(`${key}: ${value}`);
+      }
+    }
     apiClient.post(apiPaths.files, formData)
      .then(response => {
+        console.log(response.data)
+        
         setFiles([...files, response.data]);
         setNewFile(null);
         setComment('');
      })
      .catch(error => {
+      console.log(error.response ? error.response.data : error.message);
         setError(error);
      });
 };
 
-if (loading) return <p>Loading...</p>;
-if (error) return <p>Error loading files</p>;
+if (loading) return <p>Загрузка...</p>;
+if (error) return <p>Ошибка загрузки</p>;
 
 return (
     <div>
@@ -69,7 +84,7 @@ return (
      />
      <input
         type="text"
-        placeholder="Comment"
+        placeholder="Примечание/описание"
         value={comment}
         onChange={(e) => setComment(e.target.value)}
      />

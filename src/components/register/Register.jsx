@@ -22,14 +22,14 @@ function Register() {
    const [errorMessage, setErrorMessage] = useState('');
 
    const handleSubmit = (values, { setSubmitting }) => {
-
+      localStorage.clear();
       apiClient.post(apiPaths.register, values)
       .then(() => {
          setErrorMessage('')
           setSubmitting(false);
           navigate('/login');
       })
-      .catch(() => {
+      .catch(error => {
          let errorMsg = 'Произошла ошибка при регистрации. Попробуйте ввести другой пароль';
          // if (error.response && error.response.data && error.response.data.message) {
          //  errorMsg = error.response.data.message;
@@ -37,7 +37,7 @@ function Register() {
          //  errorMsg = error.message;
          // }
          
-         // console.log(error.response.data);
+         console.log(error.response.data);
          setErrorMessage(errorMsg);
          setSubmitting(false);
       });
