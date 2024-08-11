@@ -1,79 +1,105 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import { useEffect, useState } from 'react';
+import apiPaths from '../../utilits/apiPaths';
+import apiClient from '../../utilits/apiClient';
+import './AdminDashboard.css';
 
-function AdminDashboard() {
-const [users, setUsers] = useState([]);
-const [loading, setLoading] = useState(true);
-const [error, setError] = useState(null);
+function ActionButtons({ userId, is_staff, onToggleAdmin, onDeleteUser }) {
+   const [showActions, setShowActions] = useState(false);
+   
+   const handleToggleActions = () => {
+       setShowActions(!showActions);
+   };
+   
+   return (
+       <div className="action-buttons">
+        <button onClick={handleToggleActions}>Действия</button>
+        {showActions && (
+           <div className="actions-dropdown">
+            <button onClick={() => onToggleAdmin(userId)}>
+               {is_staff ? 'Удалить права администратора' : 'Дать права администратора'}
+            </button>
+            <button onClick={() => onDeleteUser(userId)}>Удалить</button>
+           </div>
+        )}
+       </div>
+   );
+   }
 
-useEffect(() => {
-    axios.get('/api/users')
-     .then(response => {
-        setUsers(response.data);
-        setLoading(false);
-     })
-     .catch(error => {
-        setError(error);
-        setLoading(false);
-     });
-}, []);
-
-const handleDeleteUser = (userId) => {
-    axios.delete(`/api/users/${userId}`)
-     .then(response => {
-        setUsers(users.filter(user => user.id !== userId));
-     })
-     .catch(error => {
-        setError(error);
-     });
-};
-
-const handleToggleAdmin = (userId) => {
-    const user = users.find(user => user.id === userId);
-    axios.put(`/api/users/${userId}`, { isAdmin: !user.isAdmin })
-     .then(response => {
-        setUsers(users.map(user => user.id === userId ? response.data : user));
-     })
-     .catch(error => {
-        setError(error);
-     });
-};
-
-if (loading) return <p>Loading...</p>;
-if (error) return <p>Error loading users</p>;
-
-return (
-    <div>
-     <h1>Admin Dashboard</h1>
-     <table>
-        <thead>
-         <tr>
-            <th>Username</th>
-            <th>Full Name</th>
-            <th>Email</th>
-            <th>Admin</th>
-            <th>Actions</th>
-         </tr>
-        </thead>
-        <tbody>
-         {users.map(user => (
-            <tr key={user.id}>
-             <td>{user.username}</td>
-             <td>{user.fullName}</td>
-             <td>{user.email}</td>
-             <td>{user.isAdmin ? 'Yes' : 'No'}</td>
-             <td>
-                <button onClick={() => handleToggleAdmin(user.id)}>
-                 {user.isAdmin ? 'Revoke Admin' : 'Make Admin'}
-                </button>
-                <button onClick={() => handleDeleteUser(user.id)}>Delete</button>
-             </td>
-            </tr>
-         ))}
-        </tbody>
-     </table>
-    </div>
-);
-}
+   function AdminDashboard() {
+      const [users, setUsers] = useState([]);
+      const [loading, setLoading] = useState(true);
+      const [error, setError] = useState(null);
+      
+      useEffect(() => {
+          apiClient.get(apiPaths.users)
+           .then(response => {
+              setUsers(response.data);
+              setLoading(false);
+           })
+           .catch(error => {
+              setError(error);
+              setLoading(false);
+           });
+      }, []);
+      
+      const handleDeleteUser = (userId) => {
+          apiClient.delete(`${apiPaths.users}${userId}`)
+           .then(response => {
+              setUsers(users.filter(user => user.id !== userId));
+           })
+           .catch(error => {
+              setError(error);
+           });
+      };
+      
+      const handleToggleAdmin = (userId) => {
+          const user = users.find(user => user.id === userId);
+          apiClient.put(`${apiPaths.users}${userId}`, { is_staff: !user.is_staff })
+           .then(response => {
+              setUsers(users.map(user => user.id === userId ? response.data : user));
+           })
+           .catch(error => {
+              setError(error);
+           });
+      };
+      
+      if (loading) return <p>Loading...</p>;
+      if (error) return <p>Error loading users</p>;
+      
+      return (
+          <div>
+           <h1>Панель администратора</h1>
+           <table>
+              <thead>
+               <tr>
+                  <th>Логин</th>
+                  <th>Полное имя</th>
+                  <th>Email</th>
+                  <th>Статус администратора</th>
+                  <th></th>
+               </tr>
+              </thead>
+              <tbody>
+               {users.map(user => (
+                  <tr key={user.id}>
+                   <td>{user.username}</td>
+                   <td>{user.fullName}</td>
+                   <td>{user.email}</td>
+                   <td>{user.is_staff ? 'Да' : 'Нет'}</td>
+                   <td>
+                      <ActionButtons
+                       userId={user.id}
+                       is_staff={user.is_staff}
+                       onToggleAdmin={handleToggleAdmin}
+                       onDeleteUser={handleDeleteUser}
+                      />
+                   </td>
+                  </tr>
+               ))}
+              </tbody>
+           </table>
+          </div>
+      );
+      }
 
 export default AdminDashboard;
