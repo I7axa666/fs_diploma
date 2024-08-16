@@ -1,0 +1,30 @@
+.file-details {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  border: 1px solid #ddd;
+  margin: 20px 0;
+  }
+  
+  .file-preview {
+  width: 100px;
+  height: 100px;
+  margin-right: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  }
+  
+  .file-preview img {
+  max-width: 100%;
+  max-height: 100%;
+  }
+  
+  .file-info {
+  display: flex;
+  flex-direction: column;
+  }
+  
+  .file-info p {
+  margin: 5px 0;
+  }

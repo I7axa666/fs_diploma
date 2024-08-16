@@ -67,6 +67,11 @@ const handleUploadFile = () => {
      });
 };
 
+const handleShareFile = (file_id) => {
+   navigator.clipboard.writeText(`${apiPaths.files}${file_id}`)
+   console.log(`${apiPaths.files}${file_id}`)
+}
+
 if (loading) return <p>Загрузка...</p>;
 if (error) return <p>Ошибка загрузки</p>;
 
@@ -107,9 +112,9 @@ return (
                <button className="dropbtn">Действия</button>
                <div className="dropdown-content">
                      <button onClick={() => handleDeleteFile(file.id)}>Удалить</button>
-                     <button onClick={() => handleRenameFile(file.id, prompt('New name:'))}>Переименовать</button>
+                     <button onClick={() => handleRenameFile(file.id, prompt('Новое имя:'))}>Переименовать</button>
                      <button onClick={() => window.open(`${apiPaths.files} + ${file.id}/download`)}>Загрузить</button>
-                     <button onClick={() => navigator.clipboard.writeText(`/api/files/${file.id}`)}>Поделиться</button>
+                     <button onClick={() => handleShareFile(file.id)}>Поделиться</button>
                   </div>
                </div>
              </td>

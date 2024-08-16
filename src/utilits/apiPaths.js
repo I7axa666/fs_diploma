@@ -4,6 +4,7 @@ const apiPaths = {
     logout: 'auth/token/logout/',
     users: '/api/users/',
     files: '/api/files/',
+    fileDetails: '/files/download/',
 };
 
 export default apiPaths
