@@ -53,7 +53,7 @@ const handleUploadFile = () => {
     formData.append('comment', comment);
     formData.append('original_name', newFile.name);
     formData.append('size', newFile.size);
-
+   
     apiClient.post(apiPaths.files, formData)
      .then(response => {
         
