@@ -1,24 +1,31 @@
 import { useEffect, useState } from 'react';
 import apiPaths from '../../utilits/apiPaths';
 import apiClient from '../../utilits/apiClient';
+import FileStorage from '../fileStorage/FileStorage';
 import './AdminDashboard.css';
 
-function ActionButtons({ userId, is_staff, onToggleAdmin, onDeleteUser }) {
+function ActionButtons({ userId, is_staff, onToggleAdmin, onDeleteUser, onGetFiles }) {
    const [showActions, setShowActions] = useState(false);
    
    const handleToggleActions = () => {
        setShowActions(!showActions);
    };
+
+   const handleAction = (action) => {
+      action();
+      setShowActions(false);
+  };
    
    return (
        <div className="action-buttons">
         <button onClick={handleToggleActions}>Действия</button>
         {showActions && (
            <div className="actions-dropdown">
-            <button onClick={() => onToggleAdmin(userId)}>
-               {is_staff ? 'Удалить права администратора' : 'Дать права администратора'}
-            </button>
-            <button onClick={() => onDeleteUser(userId)}>Удалить</button>
+               <button onClick={() => handleAction(() => onToggleAdmin(userId))}>
+            {is_staff ? 'Удалить права администратора' : 'Дать права администратора'}
+         </button>
+         <button onClick={() => handleAction(() => onDeleteUser(userId))}>Удалить</button>
+         <button onClick={() => handleAction(() => onGetFiles(userId))}>Показать файлы</button>
            </div>
         )}
        </div>
@@ -29,6 +36,7 @@ function ActionButtons({ userId, is_staff, onToggleAdmin, onDeleteUser }) {
       const [users, setUsers] = useState([]);
       const [loading, setLoading] = useState(true);
       const [error, setError] = useState(null);
+      const [selectedUserFiles, setSelectedUserFiles] = useState([]);
       
       useEffect(() => {
           apiClient.get(apiPaths.users)
@@ -50,6 +58,7 @@ function ActionButtons({ userId, is_staff, onToggleAdmin, onDeleteUser }) {
            .catch(error => {
               setError(error);
            });
+           
       };
       
       const handleToggleAdmin = (userId) => {
@@ -62,9 +71,20 @@ function ActionButtons({ userId, is_staff, onToggleAdmin, onDeleteUser }) {
               setError(error);
            });
       };
+
+      const handleGetFiles = (userId) => {
+          setSelectedUserFiles([]);
+          apiClient.get(`${apiPaths.userFiles}?user_id=${userId}`)
+           .then(response => {
+              setSelectedUserFiles(response.data);
+           })
+           .catch(error => {
+              setError(error);
+           });
+      };
       
       if (loading) return <p>Loading...</p>;
-      if (error) return <p>Error loading users</p>;
+      if (error) return <p>Ошибка загрузки пользователей</p>;
       
       return (
           <div>
@@ -92,14 +112,22 @@ function ActionButtons({ userId, is_staff, onToggleAdmin, onDeleteUser }) {
                        is_staff={user.is_staff}
                        onToggleAdmin={handleToggleAdmin}
                        onDeleteUser={handleDeleteUser}
+                       onGetFiles={handleGetFiles}
                       />
                    </td>
                   </tr>
                ))}
               </tbody>
            </table>
+           {selectedUserFiles.length > 0 && (
+               <div>
+               <h2>Файлы пользователя</h2>
+               <FileStorage files={selectedUserFiles} />
+        </div>
+     )}
           </div>
       );
       }
 
 export default AdminDashboard;
+

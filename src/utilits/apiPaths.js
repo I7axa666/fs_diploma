@@ -5,6 +5,7 @@ const apiPaths = {
     users: 'api/users/',
     files: 'api/files/',
     fileDetails: 'files/download/',
+    userFiles: 'api/files/user_files/',
 };
 
 export default apiPaths
