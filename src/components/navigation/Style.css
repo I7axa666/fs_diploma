@@ -1,34 +1,32 @@
 .navigation {
-    /* position: fixed; /* Закрепляем навигацию */
-    /* top: 20px; Закрепляем сверху */
     margin-left: auto;
     margin-right: auto;
-    width: 100%; /* Ширина на всю страницу */
+    width: 100%;
     display: flex;
-    justify-content: center; /* Центрируем содержимое по горизонтали */
-    background-color: #f8f9fa; /* Фоновый цвет для навигации */
-    padding: 10px 0; /* Отступы сверху и снизу */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Добавляем тень для визуального отделения */
-    z-index: 1000; /* Устанавливаем высокий z-index, чтобы навигация была поверх других элементов */
+    justify-content: center;
+    background-color: #f8f9fa;
+    padding: 10px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+    z-index: 1000;
 }
-    
+
 .nav-list {
-    list-style: none; /* Убираем маркеры списка */
-    display: flex; /* Делаем список горизонтальным */
-    padding: 0; /* Убираем отступы */
-    margin: 0; /* Убираем отступы */
+    list-style: none; 
+    display: flex; 
+    padding: 0; 
+    margin: 0; 
 }
     
 .nav-item {
-    margin: 0 15px; /* Отступы между элементами списка */
+    margin: 0 15px; 
 }
     
 .nav-item a {
-    text-decoration: none; /* Убираем подчеркивание ссылок */
-    color: #007bff; /* Цвет текста ссылок */
-    font-weight: bold; /* Жирный шрифт */
+    text-decoration: none; 
+    color: #007bff; 
+    font-weight: bold; 
 }
     
 .nav-item a:hover {
-    color: #0056b3; /* Цвет текста при наведении */
+    color: #0056b3; 
 }

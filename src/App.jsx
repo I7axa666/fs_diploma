@@ -1,5 +1,8 @@
 import './App.css'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { checkAuth } from './actions/authActions';
 import HomePage from './components/homePage/HomePage';
 import Register from './components/register/Register';
 import Login from './components/login/Login';
@@ -9,6 +12,13 @@ import Navigation from './components/navigation/Navigation';
 import FileDetails from './components/FileDetails/FileDetails';
 
 function App() {
+
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(checkAuth());
+    }, [dispatch]);
+
 return (
     <Router>
      <Navigation />

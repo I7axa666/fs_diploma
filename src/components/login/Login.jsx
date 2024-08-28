@@ -2,8 +2,9 @@ import { useState } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
-import apiPaths from '../../utilits/apiPaths';
-import apiClient from '../../utilits/apiClient';
+import { useDispatch } from 'react-redux';
+import { login } from '../../actions/authActions';
+import '../navigation/Style.css';
 
 const LoginSchema = Yup.object().shape({
 username: Yup.string().required('Поле обязательно для заполнения'),
@@ -13,6 +14,8 @@ password: Yup.string().required('Поле обязательно для запо
 function Login() {
    const [errorMessage, setErrorMessage] = useState('');
    const navigate = useNavigate();
+   const dispatch = useDispatch();
+
 return (
     <div>
      <h1>Вход в хранилище</h1>
@@ -21,13 +24,11 @@ return (
         validationSchema={LoginSchema}
         onSubmit={(values, { setSubmitting }) => {
          localStorage.clear();
-         apiClient.post(apiPaths.login, values)
-            .then(response => {
-               const token = response.data.auth_token;
-               localStorage.setItem('authToken', token);             
-               setSubmitting(false);
-               setErrorMessage('');
-               navigate('/storage');
+         dispatch(login(values))
+            .then(() => {
+             setSubmitting(false);
+             setErrorMessage('');
+             navigate('/storage');
             })
             .catch(() => {
                let errorMsg = 'Неверный логин или пароль'

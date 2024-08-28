@@ -63,7 +63,7 @@ function ActionButtons({ userId, is_staff, onToggleAdmin, onDeleteUser, onGetFil
       
       const handleToggleAdmin = (userId) => {
           const user = users.find(user => user.id === userId);
-          apiClient.put(`${apiPaths.users}${userId}`, { is_staff: !user.is_staff })
+          apiClient.put(`${apiPaths.users}${userId}/`, { is_staff: !user.is_staff })
            .then(response => {
               setUsers(users.map(user => user.id === userId ? response.data : user));
            })
