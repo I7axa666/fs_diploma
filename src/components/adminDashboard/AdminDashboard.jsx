@@ -41,6 +41,7 @@ function ActionButtons({ userId, is_staff, onToggleAdmin, onDeleteUser, onGetFil
       useEffect(() => {
           apiClient.get(apiPaths.users)
            .then(response => {
+            //   console.log(response.data)
               setUsers(response.data);
               setLoading(false);
            })
@@ -96,6 +97,8 @@ function ActionButtons({ userId, is_staff, onToggleAdmin, onDeleteUser, onGetFil
                   <th>Полное имя</th>
                   <th>Email</th>
                   <th>Статус администратора</th>
+                  <th>Всего файлов</th>
+                  <th>Общий размер</th>
                   <th></th>
                </tr>
               </thead>
@@ -106,6 +109,8 @@ function ActionButtons({ userId, is_staff, onToggleAdmin, onDeleteUser, onGetFil
                    <td>{user.fullName}</td>
                    <td>{user.email}</td>
                    <td>{user.is_staff ? 'Да' : 'Нет'}</td>
+                   <td>{user.profile.file_count}</td>
+                   <td>{Math.round(user.profile.total_file_size / 1024)} Кб</td>
                    <td>
                       <ActionButtons
                        userId={user.id}

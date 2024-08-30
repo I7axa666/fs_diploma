@@ -14,7 +14,7 @@ import defaultIcon from '../../icons/file-icon.png';
 
 function FileDetails() {
   const { share_token } = useParams();
-  // console.log(`${apiPaths.fileDetails}${share_token}/`)
+  console.log(`${apiPaths.fileDetails}${share_token}/`)
   const [fileData, setFileData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);

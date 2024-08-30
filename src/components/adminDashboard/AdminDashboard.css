@@ -10,8 +10,8 @@ table {
     }
     
     th {
-    background-color: #003366; /* Темно-синий фон для шапки таблицы */
-    color: white; /* Белый цвет текста для контраста */
+    background-color: #003366; 
+    color: white; 
     }
     
     td {
@@ -26,7 +26,7 @@ table {
     position: absolute;
     top: 100%;
     left: 0;
-    background-color: #003366; /* Темно-синий фон для выпадающего окна */
+    background-color: #003366; 
     border: 1px solid #ddd;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     z-index: 1;
@@ -40,9 +40,9 @@ table {
     background: none;
     text-align: left;
     cursor: pointer;
-    color: white; /* Белый цвет текста для контраста */
+    color: white; 
     }
     
     .actions-dropdown button:hover {
-    background-color: #002244; /* Более темный оттенок синего для эффекта наведения */
+    background-color: #002244; 
     }
