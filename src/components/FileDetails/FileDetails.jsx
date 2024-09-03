@@ -62,43 +62,45 @@ function FileDetails() {
   };
 
   const handleDownload = () => {
-    // console.log(`${fileData.storage_path}`)
-
-    fetch(`${fileData.storage_path}`, {
-      method: 'GET',
-      headers: {
-         'Content-Type': 'application/octet-stream',
-      },
-     })
-      .then(response => response.blob())
-      .then(blob => {
-         const url = window.URL.createObjectURL(blob);
-         const link = document.createElement('a');
-         link.href = url;
-         link.setAttribute('download', fileData.original_name);
-         document.body.appendChild(link);
-         link.click();
-         link.parentNode.removeChild(link);
-      })
-      .catch(error => console.error('Ошибка скачивания файла:', error));
-  };  
+    fetch(fileData.storage_path, {
+        method: 'GET',
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.blob();
+    })
+    .then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', fileData.original_name);
+        document.body.appendChild(link);
+        link.click();
+        link.parentNode.removeChild(link);
+    })
+    .catch(error => console.error('Ошибка скачивания файла:', error));
+  };
 
 return (
   <div>
     <header className="site-header">
       <h1>Информация о файле</h1>
     </header>
-    <div className="file-details">
-      <div className="file-preview">
-        {getFilePreview(fileData.storage_path)}
+    {fileData && (
+      <div className="file-details">
+        <div className="file-preview">
+          {getFilePreview(fileData.storage_path)}
+        </div>
+        <div className="file-info">
+          <p><strong>Название:</strong> {fileData.original_name}</p>
+          <p><strong>Размер:</strong> {(fileData.size / 1024 / 1024).toFixed(3)} Мб</p>
+          {fileData.comment && <p><strong>Комментарий:</strong> {fileData.comment}</p>}
+          <button className="download-button" onClick={handleDownload}>Скачать файл</button>
+        </div>
       </div>
-      <div className="file-info">
-        <p><strong>Название:</strong> {fileData.original_name}</p>
-        <p><strong>Размер:</strong> {(fileData.size / 1024 / 1024).toFixed(3)} Мб</p>
-        {fileData.comment && <p><strong>Комментарий:</strong> {fileData.comment}</p>}
-        <button className="download-button" onClick={handleDownload}>Скачать файл</button>
-      </div>
-    </div>
+    )}
   </div>
 );
 }
