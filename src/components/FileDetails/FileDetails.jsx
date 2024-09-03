@@ -13,6 +13,7 @@ import defaultIcon from '../../icons/file-icon.png';
 
 
 function FileDetails() {
+  console.log('FileDetails component loaded');
   const { share_token } = useParams();
   console.log(`${apiPaths.fileDetails}${share_token}/`)
   const [fileData, setFileData] = useState(null);
@@ -20,22 +21,33 @@ function FileDetails() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    console.log('Starting API request with URL:', `${apiPaths.fileDetails}${share_token}/`);
     apiClient.get(`${apiPaths.fileDetails}${share_token}/`)
-    .then(response => {
-        setFileData(response.data);
-        // console.log(fileData);
+      .then(response => {
+        if (typeof response.data === 'object') {
+           console.log(response.data); 
+	   setFileData(response.data);
+        } else {
+	    console.log('Invalid data format:', response.data);
+            setError('Некорректный формат данных');
+        }
         setLoading(false);
-      }
-    )
-    .catch(error => {
+        }
+      )
+      .catch(error => {
+	console.log('API request failed:', error.message);
         setError(error.message);
         setLoading(false);    
       }
     );
   }, [share_token]);
 
+
   if (loading) return <p>Загрузка...</p>;
-  if (error) return <p>Неверная ссылка или доступ к файлу ограничен</p>;
+  if (error) {
+    console.log('Error occurred:', error);
+    return <p>Неверная ссылка или доступ к файлу ограничен</p>;
+  }
 
   const getFilePreview = (filePath) => {
     const fileExtension = filePath.split('.').pop().toLowerCase();
@@ -82,6 +94,10 @@ function FileDetails() {
     })
     .catch(error => console.error('Ошибка скачивания файла:', error));
   };
+
+  if (fileData) {
+    console.log('Rendering file details with data:', fileData);
+  }
 
 return (
   <div>

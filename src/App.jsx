@@ -16,6 +16,7 @@ function App() {
     const dispatch = useDispatch();
 
     useEffect(() => {
+	console.log("App loaded");
         dispatch(checkAuth());
     }, [dispatch]);
 
@@ -29,7 +30,7 @@ return (
                 <Route path="/login" element={<Login />} />
                 <Route path="/admin" element={<AdminDashboard />} />
                 <Route path="/storage" element={<FileStorage />} />
-                <Route path="/files/download/:share_token" element={<FileDetails />} />
+                <Route path="/files/info/:share_token" element={<FileDetails />} />
             </Routes>
         </div>
     </Router>
